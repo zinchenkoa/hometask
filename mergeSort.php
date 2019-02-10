@@ -1,9 +1,6 @@
 <?php
 
-$options = getopt('n:');
-$n = (int) $options['n'];
-
-$array = generateRandomArray($n);
+$array = [4, 7, 1, 3, 2, 6];
 
 $result = mergeSort($array);
 
@@ -49,13 +46,6 @@ function merge(array $left, array $right): array
     }
 
     return $result;
-}
-
-function generateRandomArray(int $n): array
-{
-    $array = range(1, $n);
-    shuffle($array);
-    return $array;
 }
 
 echo 'Before sorting' . PHP_EOL;
