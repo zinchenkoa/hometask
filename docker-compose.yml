@@ -1,0 +1,11 @@
+version: '3'
+services:
+  webapp:
+    build: build # <----
+    #    image: php:7.3-apache
+    ports:
+      - 8002:80
+    volumes:
+      - ./:/var/www/html/
+    environment:
+      XDEBUG_CONFIG: remote_host=172.17.0.1
