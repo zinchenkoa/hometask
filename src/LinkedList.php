@@ -19,15 +19,24 @@ class LinkedList
         $obj = new SeparateNode();
         $obj->setValue($value);
 
-        if (!empty($this->tail)) {
-            $obj->setPrevious($this->tail);
-
-            /** @var SeparateNode $prevObj */
-            $prevObj = $obj->getPrevious();
-            $prevObj->setNext($obj);
+        if ($this->tail !== null && $this->head !== null) {
+            $previous = $this->tail->getPrevious();
+            if ($previous === null) {
+                $oldTail = $this->tail;
+                $this->tail = $obj;
+                $this->tail->setPrevious($oldTail);
+            } else {
+                $oldTail = $this->tail;
+                $previous->setNext($oldTail);
+                $oldTail->setPrevious($previous);
+                $oldTail->setNext($obj);
+                $this->tail = $obj;
+                $this->tail->setPrevious($oldTail);
+            }
+        } else {
+            $this->tail = $obj;
+            $this->head = $obj;
         }
-
-        $this->tail = $obj;
     }
 
     /**
@@ -62,6 +71,7 @@ class LinkedList
         }
 
         $this->tail = $this->tail->getPrevious() ?? null;
+
     }
 
     public function insertAfterAt($value, $at)
@@ -71,7 +81,7 @@ class LinkedList
         $newElement->setValue($value);
 
 
-        if(!empty($this->head)) { //
+        if($this->head !== null) { //
             /** @var SeparateNode $lastElement */
             $lastElement = $this->head;
 
@@ -87,6 +97,7 @@ class LinkedList
     public function insertBeforeAt($value, $at)
     {
 
+
     }
 
     public function deleteAt($value, $at)
@@ -98,28 +109,6 @@ class LinkedList
     {
 
     }
-
-//    /**
-//     * Append using head
-//     * @param $value
-//     */
-//    public function append($value)
-//    {
-//        $newElement = new SeparateNode();
-//        $newElement->setValue($value);
-//        if(!empty($this->head)) {
-//            /** @var SeparateNode $lastElement */
-//            $lastElement = $this->head;
-//            // O(n)
-//            while (!empty($lastElement->getNext())) {
-//                $lastElement = $lastElement->getNext();
-//            }
-//            $lastElement->setNext($newElement);
-//        } else {
-//            $this->head = $newElement;
-//        }
-//    }
-
 //    /**
 //     * Delete from end using head
 //     * @param $value
