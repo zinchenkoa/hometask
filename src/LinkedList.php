@@ -80,26 +80,19 @@ class LinkedList
     {
         $newNode = new SeparateNode($value);
 
-        if ($this->head === null) {
-            throw new RuntimeException('List is empty');
+        try {
+            $node = $this->search($at);
+        } catch (Exception $exception) {
+            echo $exception->getMessage();
+            return;
         }
 
-        $atElement = $this->head;
-
-        while ($atElement->getValue() !== $at) {
-            $atElement = $atElement->getNext();
-        }
-
-        if ($atElement === null) {
-            throw new RuntimeException('Element not found');
-        }
-
-        $next = $atElement->getNext();
+        $next = $node->getNext();
         if ($next !== null) {
             $next->setPrevious($newNode);
             $newNode->setNext($next);
-            $newNode->setPrevious($atElement);
-            $atElement->setNext($newNode);
+            $newNode->setPrevious($node);
+            $node->setNext($newNode);
         } else {
             $this->tail->setNext($newNode);
             $newNode->setPrevious($this->tail);
@@ -111,32 +104,24 @@ class LinkedList
     /**
      * @param mixed $value
      * @param mixed $at
-     * @throws RuntimeException
      */
     public function insertBeforeAt($value, $at): void
     {
         $newNode = new SeparateNode($value);
 
-        if ($this->head === null) {
-            throw new RuntimeException('List is empty');
+        try {
+            $node = $this->search($at);
+        } catch (Exception $exception) {
+            echo $exception->getMessage();
+            return;
         }
 
-        $atElement = $this->head;
-
-        while ($atElement->getValue() !== $at) {
-            $atElement = $atElement->getNext();
-        }
-
-        if ($atElement === null) {
-            throw new RuntimeException('Element not found');
-        }
-
-        $previous = $atElement->getPrevious();
+        $previous = $node->getPrevious();
         if ($previous !== null) {
             $previous->setNext($newNode);
             $newNode->setPrevious($previous);
-            $newNode->setNext($atElement);
-            $atElement->setPrevious($newNode);
+            $newNode->setNext($node);
+            $node->setPrevious($newNode);
         } else {
             $this->head->setPrevious($newNode);
             $newNode->setNext($this->head);
@@ -144,36 +129,54 @@ class LinkedList
         }
     }
 
-    public function deleteAt($value, $at)
+    /**
+     * Delete node with given value
+     * @param $value
+     */
+    public function deleteAt($value)
     {
+        $node = $this->search($value);
 
+        $previous = $node->getPrevious();
+        $next = $node->getNext();
+
+        if ($previous !== null && $next !== null) {
+            $previous->setNext($next);
+            $next->setPrevious($previous);
+        }
+
+        if ($previous === null) {
+            $next->setPrevious(null);
+            $this->head = $next;
+        }
+
+        if ($next === null) {
+            $previous->setNext(null);
+            $this->tail = $previous;
+        }
     }
 
-    public function search()
+    /**
+     * @param $value
+     * @return SeparateNode
+     * @throws RuntimeException
+     */
+    public function search($value): SeparateNode
     {
+        if ($this->head === null) {
+            throw new RuntimeException('List is empty');
+        }
 
+        $node = $this->head;
+
+        while ($node !== null && $node->getValue() !== $value) {
+            $node = $node->getNext();
+        }
+
+        if ($node === null) {
+            throw new RuntimeException('Element not found');
+        }
+
+        return $node;
     }
-//    /**
-//     * Delete from end using head
-//     * @param $value
-//     */
-//    public function deleteFromEnd()
-//    {
-//
-//        if (!empty($this->head)) {
-//            /** @var SeparateNode $lastElement */
-//            $lastElement = $this->head;
-//            $prev = null;
-//
-//            // O(n)
-//            while (!empty($lastElement->getNext())) {
-//                $prev = $lastElement;
-//                $lastElement = $lastElement->getNext();
-//            } // end of the list
-//
-//            $prev->setNext(null);
-//        } else {
-//            throw new RuntimeException('Notice');
-//        }
-//    }
 }
