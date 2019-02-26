@@ -71,7 +71,12 @@ class LinkedList
         $this->tail->setNext(null);
     }
 
-    public function insertAfterAt($value, $at)
+    /**
+     * @param mixed $value
+     * @param mixed $at
+     * @throws RuntimeException
+     */
+    public function insertAfterAt($value, $at): void
     {
         $newNode = new SeparateNode($value);
 
@@ -102,10 +107,41 @@ class LinkedList
         }
     }
 
-    public function insertBeforeAt($value, $at)
+
+    /**
+     * @param mixed $value
+     * @param mixed $at
+     * @throws RuntimeException
+     */
+    public function insertBeforeAt($value, $at): void
     {
+        $newNode = new SeparateNode($value);
 
+        if ($this->head === null) {
+            throw new RuntimeException('List is empty');
+        }
 
+        $atElement = $this->head;
+
+        while ($atElement->getValue() !== $at) {
+            $atElement = $atElement->getNext();
+        }
+
+        if ($atElement === null) {
+            throw new RuntimeException('Element not found');
+        }
+
+        $previous = $atElement->getPrevious();
+        if ($previous !== null) {
+            $previous->setNext($newNode);
+            $newNode->setPrevious($previous);
+            $newNode->setNext($atElement);
+            $atElement->setPrevious($newNode);
+        } else {
+            $this->head->setPrevious($newNode);
+            $newNode->setNext($this->head);
+            $this->head = $newNode;
+        }
     }
 
     public function deleteAt($value, $at)
