@@ -3,8 +3,21 @@
 class SeparateNode
 {
     private $value;
+
+    /**
+     * @var SeparateNode
+     */
     private $next = null;
+
+    /**
+     * @var SeparateNode
+     */
     private $previous = null;
+
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
 
     /**
      * @return mixed
@@ -23,9 +36,9 @@ class SeparateNode
     }
 
     /**
-     * @return null
+     * @return SeparateNode|null
      */
-    public function getNext()
+    public function getNext(): ?SeparateNode
     {
         return $this->next;
     }
@@ -39,9 +52,9 @@ class SeparateNode
     }
 
     /**
-     * @return null
+     * @return SeparateNode|null
      */
-    public function getPrevious()
+    public function getPrevious(): ?SeparateNode
     {
         return $this->previous;
     }

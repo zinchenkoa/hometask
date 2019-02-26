@@ -14,29 +14,19 @@ class LinkedList
      * Append using tail
      * @param $value
      */
-    public function append($value)
+    public function append($value): void
     {
-        $obj = new SeparateNode();
-        $obj->setValue($value);
+        $obj = new SeparateNode($value);
 
-        if ($this->tail !== null && $this->head !== null) {
-            $previous = $this->tail->getPrevious();
-            if ($previous === null) {
-                $oldTail = $this->tail;
-                $this->tail = $obj;
-                $this->tail->setPrevious($oldTail);
-            } else {
-                $oldTail = $this->tail;
-                $previous->setNext($oldTail);
-                $oldTail->setPrevious($previous);
-                $oldTail->setNext($obj);
-                $this->tail = $obj;
-                $this->tail->setPrevious($oldTail);
-            }
-        } else {
-            $this->tail = $obj;
+        if ($this->head === null) {
             $this->head = $obj;
+            $this->tail = $obj;
+            return;
         }
+
+        $this->tail->setNext($obj);
+        $obj->setPrevious($this->tail);
+        $this->tail = $obj;
     }
 
     /**
@@ -45,20 +35,27 @@ class LinkedList
      */
     public function prepend($value)
     {
-        $obj = new SeparateNode();
-        $obj->setValue($value);
+        $obj = new SeparateNode($value);
 
-        $headObj = $this->head;
-        $obj->setNext($headObj);
+        if ($this->head === null) {
+            $this->head = $obj;
+            $this->tail = $obj;
+            return;
+        }
+
+        $this->head->setPrevious($obj);
+        $obj->setNext($this->head);
         $this->head = $obj;
     }
 
     public function deleteFromHead()
     {
-        if (empty($this->head)) {
-            throw new RuntimeException("Notice");
+        if ($this->head === null) {
+            throw new RuntimeException('List is empty');
         }
+
         $this->head = $this->head->getNext();
+        $this->head->setPrevious(null);
     }
 
     /**
@@ -66,31 +63,42 @@ class LinkedList
      */
     public function deleteFromEnd()
     {
-        if (empty($this->tail)) {
-            throw new RuntimeException('Notice');
+        if ($this->tail === null) {
+            throw new RuntimeException('List is empty');
         }
 
-        $this->tail = $this->tail->getPrevious() ?? null;
-
+        $this->tail = $this->tail->getPrevious();
+        $this->tail->setNext(null);
     }
 
     public function insertAfterAt($value, $at)
     {
+        $newNode = new SeparateNode($value);
 
-        $newElement = new SeparateNode();
-        $newElement->setValue($value);
+        if ($this->head === null) {
+            throw new RuntimeException('List is empty');
+        }
 
+        $atElement = $this->head;
 
-        if($this->head !== null) { //
-            /** @var SeparateNode $lastElement */
-            $lastElement = $this->head;
+        while ($atElement->getValue() !== $at) {
+            $atElement = $atElement->getNext();
+        }
 
-            while ($lastElement->getValue() !== $at) {
-                $lastElement = $lastElement->getNext();
-            }
-            $lastElement->setNext($newElement);
+        if ($atElement === null) {
+            throw new RuntimeException('Element not found');
+        }
+
+        $next = $atElement->getNext();
+        if ($next !== null) {
+            $next->setPrevious($newNode);
+            $newNode->setNext($next);
+            $newNode->setPrevious($atElement);
+            $atElement->setNext($newNode);
         } else {
-            throw new RuntimeException("Can't insert $value after $at");
+            $this->tail->setNext($newNode);
+            $newNode->setPrevious($this->tail);
+            $this->tail = $newNode;
         }
     }
 

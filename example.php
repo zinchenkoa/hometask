@@ -7,5 +7,5 @@ $linkedList->append("new item2");
 $linkedList->append("new item3");
 $linkedList->append("new item4");
 
-$linkedList->deleteFromEnd();
+$linkedList->insertAfterAt('3.5', 'new item3');
 print_r($linkedList);
