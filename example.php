@@ -1,18 +1,21 @@
 <?php
 require_once __DIR__ . '/src/LinkedList.php';
+require_once __DIR__ . '/src/LinkedListOperations.php';
 
-$linkedList = new LinkedList();
-$linkedList->append('new item1');
-$linkedList->append('new item2');
-$linkedList->append('new item3');
-$linkedList->deleteFromEnd();
-$linkedList->append('new item4');
-$linkedList->append('new item5');
-$linkedList->append('new item6');
-$linkedList->deleteAt('new item5');
-$linkedList->prepend('new item0');
-$linkedList->insertAfterAt('new item1.5', 'new item1');
-$linkedList->insertBeforeAt('new item0.5', 'new item1');
-$linkedList->deleteAt('new item4');
+$linkedList1 = new LinkedList();
+$linkedList1->append('4');
+$linkedList1->append('7');
+$linkedList1->append('6');
+$linkedList1->append('1');
+//$linkedList1->append('Not valid');
 
-print_r($linkedList);
+$linkedList2 = new LinkedList();
+$linkedList2->append('3');
+$linkedList2->append('4');
+$linkedList2->append('1');
+
+$linkedListOperations = new LinkedListOperations();
+
+$newLinkedList = $linkedListOperations->sum($linkedList1, $linkedList2);
+print_r($newLinkedList);
+

@@ -179,4 +179,27 @@ class LinkedList
 
         return $node;
     }
+
+    /**
+     * @return int
+     */
+    public function toInt()
+    {
+
+        if ($this->head !== null) {
+            $number = '';
+            $lastNode = $this->tail;
+
+            while ($lastNode->getPrevious() !== null) {
+                $number .= $lastNode->getValue();
+                $lastNode = $lastNode->getPrevious();
+            }
+            $number .= $this->head->getValue();
+        } else {
+            throw new RuntimeException('One of the lists is empty');
+        }
+
+        return (int) $number;
+    }
+
 }

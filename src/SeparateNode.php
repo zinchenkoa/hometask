@@ -14,8 +14,15 @@ class SeparateNode
      */
     private $previous = null;
 
+    /**
+     * SeparateNode constructor.
+     * @param $value
+     */
     public function __construct($value)
     {
+        if (!$this->validatePositiveInteger($value)) {
+            throw new UnexpectedValueException('Enter a positive number in range 0 - 1000000000');
+        }
         $this->value = $value;
     }
 
@@ -65,6 +72,21 @@ class SeparateNode
     public function setPrevious($previous): void
     {
         $this->previous = $previous;
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function validatePositiveInteger($value)
+    {
+        $options = array(
+            'options' => array(
+                'min_range' => 0,
+                'max_range' => 1000000000,
+            ),
+        );
+        return filter_var($value, FILTER_VALIDATE_INT, $options);
     }
 
 }
