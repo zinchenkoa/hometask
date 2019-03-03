@@ -2,13 +2,13 @@
 
 class HashTable
 {
-    /** @var array  */
+    /** @var array */
     private $storage = [];
 
     /** @var int */
     private $hashTableMaxLength;
 
-    /** @var ResolverInterface  */
+    /** @var ResolverInterface */
     private $collisionResolver;
 
     /**
@@ -22,8 +22,13 @@ class HashTable
         $this->collisionResolver = $colisionResolver;
     }
 
-    public function write($index, $value) {
-        if(isset($this->storage[$index]) && !empty($this->storage[$index])) {
+    /**
+     * @param int $index
+     * @param $value
+     */
+    public function write(int $index, $value)
+    {
+        if (isset($this->storage[$index]) && !empty($this->storage[$index])) {
             $newIndex = $this->collisionResolver->resolve($index, $this->storage, $this->hashTableMaxLength);
             $this->storage[$newIndex] = $value;
         } else {
@@ -31,5 +36,20 @@ class HashTable
         }
     }
 
+    /**
+     * @param int $index
+     * @param mixed $value
+     * @return array
+     * @throws Exception
+     */
+    public function get(int $index, $value): array
+    {
+        if (!isset($this->storage[$index]) || empty($this->storage[$index])) {
+            throw new Exception("Value $value not found.");
+        }
+        if ($this->storage[$index] !== $value) {
+            $index = $this->collisionResolver->fetch($index, $this->storage, $value, $this->hashTableMaxLength);
+        }
+        return [$index => $value];
+    }
 }
-

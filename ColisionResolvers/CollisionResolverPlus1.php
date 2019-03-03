@@ -4,13 +4,20 @@ require_once __DIR__ . '/CollisionResolverInterface.php';
 
 class CollisionResolverPlus1 implements ResolverInterface
 {
-    public function resolve($index, $hranilishche, $size)
+    /**
+     * @param int $index
+     * @param array $storage
+     * @param int $size
+     * @return int
+     * @throws Exception
+     */
+    public function resolve(int $index, array $storage, int $size)
     {
         $flag = false;
         for ($j = $index + 1; ; $j++) {
             if ($j >= $size) {
                 if ($flag) {
-                    throw Exception('Our table is full');
+                    throw new Exception('Our table is full');
                 }
 
                 $j = 0;
@@ -18,12 +25,42 @@ class CollisionResolverPlus1 implements ResolverInterface
             }
 
             if (
-                isset($hranilishche[$j])
-                && !empty($hranilishche[$j])) {
+                isset($storage[$j])
+                && !empty($storage[$j])) {
                 continue;
-            } else {
+            }
+            return $j;
+
+        }
+    }
+
+
+    /**
+     * @param int $index
+     * @param array $storage
+     * @param $value
+     * @param int $size
+     * @return int|null
+     * @throws Exception
+     */
+    public function fetch(int $index, array $storage, $value, int $size): ?int
+    {
+        $flag = false;
+        for ($j = $index + 1; ; $j++) {
+            if (isset($storage[$j]) && $storage[$j] === $value) {
                 return $j;
             }
+
+            if ($j >= $size) {
+                if ($flag) {
+                    throw new Exception('Not found');
+                }
+
+                $j = 0;
+                $flag = true;
+            }
         }
+
+        return null;
     }
 }
