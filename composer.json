@@ -1,0 +1,16 @@
+{
+    "name": "anna/hometask",
+    "type": "project",
+    "authors": [
+        {
+            "name": "anna",
+            "email": "bettercallanna@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "App"
+        }
+    }
+}
